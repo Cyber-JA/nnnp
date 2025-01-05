@@ -16,34 +16,7 @@ def execute(cmd):
     
     return output.decode()
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(
-        description='No Netcat ? No problem',
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog=textwrap.dedent('''Example:
-                               nnnp.py -t 10.10.10.10 -p 1234 -l -c # command shell
-                               nnnp.py -t 10.10.10.10 -p 1234 -l -u=text.txt # file upload
-                               nnnp.py -t 10.10.10.10 -p 1234 -l -e=\"cat /etc/passwd\" # execute command
-                               echo something | nnnp.py -t 10.10.10.10 -p 1234" # echo something to specified target
-                               nnnp.py -t 10.10.10.10 -p 1234 # connect to target''')
-    )
-    parser.add_argument('-c', '--command', action='store_true', help='command shell')
-    parser.add_argument('-e', '--execute', help='execute specified command')
-    parser.add_argument('-l', '--listen',action='store_true', help='listener mode')
-    parser.add_argument('-p', '--port', help='specify port to be used', type=int, default=1234)
-    parser.add_argument('-t', '--target', help='specify target', default='127.0.0.1')
-    parser.add_argument('-u', '--upload', help='upload specified file')
-    args = parser.parse_args()
-
-    if args.listen:
-        buffer = ''
-    else:
-        buffer = sys.stdin.read()
-    
-    nc = nnnp(args, buffer.encode())
-    nc.run()
-
-class nnnp:
+class Nnnp:
     def __init__(self, args, buffer=None):
         self.args = args
         self.buffer = buffer
@@ -59,3 +32,36 @@ class nnnp:
     
     def send():
         pass
+
+    def listen():
+        pass
+
+    def handle():
+        pass
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(
+        description='No Netcat ? No problem',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog=textwrap.dedent('''Example:
+    nnnp.py -t 10.10.10.10 -p 1234 -l -c # command shell
+    nnnp.py -t 10.10.10.10 -p 1234 -l -u=text.txt # file upload
+    nnnp.py -t 10.10.10.10 -p 1234 -l -e=\"cat /etc/passwd\" # execute command
+    echo something | nnnp.py -t 10.10.10.10 -p 1234" # echo something to specified target
+    nnnp.py -t 10.10.10.10 -p 1234 # connect to target''')
+    )
+    parser.add_argument('-c', '--command', action='store_true', help='command shell')
+    parser.add_argument('-e', '--execute', help='execute specified command')
+    parser.add_argument('-l', '--listen',action='store_true', help='listener mode')
+    parser.add_argument('-p', '--port', help='specify port to be used', type=int, default=1234)
+    parser.add_argument('-t', '--target', help='specify target', default='127.0.0.1')
+    parser.add_argument('-u', '--upload', help='upload specified file')
+    args = parser.parse_args()
+
+    if args.listen:
+        buffer = ''
+    else:
+        buffer = sys.stdin.read()
+    
+    nc = Nnnp(args, buffer.encode())
+    nc.run()
